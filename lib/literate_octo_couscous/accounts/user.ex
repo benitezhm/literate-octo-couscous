@@ -1,12 +1,22 @@
 defmodule LiterateOctoCouscous.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
+
+  alias LiterateOctoCouscous.Repo
+  alias LiterateOctoCouscous.Accounts.User
+  alias LiterateOctoCouscous.Accounts.UserJob
+  alias LiterateOctoCouscous.Accounts.UserDevice
 
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    has_many :user_jobs, UserJob
+    has_many :user_devices, UserDevice
+    field :jobs_count, :integer, virtual: true
+    field :devices_count, :integer, virtual: true
 
     timestamps()
   end
@@ -28,7 +38,7 @@ defmodule LiterateOctoCouscous.Accounts.User do
       validations on a LiveView form), this option can be set to `false`.
       Defaults to `true`.
   """
-  def registration_changeset(user, attrs, opts \\ []) do
+  def eregistration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password])
     |> validate_email()
@@ -117,7 +127,10 @@ defmodule LiterateOctoCouscous.Accounts.User do
   If there is no user or the user doesn't have a password, we call
   `Bcrypt.no_user_verify/0` to avoid timing attacks.
   """
-  def valid_password?(%LiterateOctoCouscous.Accounts.User{hashed_password: hashed_password}, password)
+  def valid_password?(
+        %LiterateOctoCouscous.Accounts.User{hashed_password: hashed_password},
+        password
+      )
       when is_binary(hashed_password) and byte_size(password) > 0 do
     Bcrypt.verify_pass(password, hashed_password)
   end
@@ -136,5 +149,38 @@ defmodule LiterateOctoCouscous.Accounts.User do
     else
       add_error(changeset, :current_password, "is not valid")
     end
+  end
+
+  def get_users_with_jobs_and_devices() do
+    jobs_count_query = get_jobs_count_query()
+    devices_count_query = get_devices_count_query()
+
+    query =
+      from user in User,
+        left_join: device in subquery(devices_count_query),
+        on: device.user_id == user.id,
+        left_join: job in subquery(jobs_count_query),
+        on: job.user_id == user.id,
+        group_by: [user.id, job.count, device.count],
+        select_merge: %{
+          jobs_count: job.count |> coalesce(0),
+          devices_count: device.count |> coalesce(0)
+        },
+        order_by: [asc: user.id]
+
+    query
+    |> Repo.all()
+  end
+
+  defp get_jobs_count_query() do
+    from job in UserJob,
+      group_by: job.user_id,
+      select: %{user_id: job.user_id, count: count(job.id)}
+  end
+
+  defp get_devices_count_query() do
+    from device in UserDevice,
+      group_by: device.user_id,
+      select: %{user_id: device.user_id, count: count(device.id)}
   end
 end

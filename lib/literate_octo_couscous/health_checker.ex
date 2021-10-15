@@ -31,12 +31,13 @@ defmodule LiterateOctoCouscous.HealthChecker do
     |> process_response()
   end
 
-  defp process_response({response_time,
-         {:ok,
-          %HTTPoison.Response{
-            body: body,
-            status_code: status_code
-          }}}
+  defp process_response(
+         {response_time,
+          {:ok,
+           %HTTPoison.Response{
+             body: body,
+             status_code: status_code
+           }}}
        ) do
     body = Poison.decode!(body)
     response = %{status_code: status_code, body: body, response_time: response_time}

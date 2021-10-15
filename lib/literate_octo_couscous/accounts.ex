@@ -76,7 +76,7 @@ defmodule LiterateOctoCouscous.Accounts do
   """
   def register_user(attrs) do
     %User{}
-    |> User.registration_changeset(attrs)
+    |> User.eregistration_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -90,7 +90,7 @@ defmodule LiterateOctoCouscous.Accounts do
 
   """
   def change_user_registration(%User{} = user, attrs \\ %{}) do
-    User.registration_changeset(user, attrs, hash_password: false)
+    User.eregistration_changeset(user, attrs, hash_password: false)
   end
 
   ## Settings

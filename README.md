@@ -30,4 +30,4 @@ https://hexdocs.pm/phoenix/mix_phx_gen_auth.html
 
 ## Tests
 
-You can run the tests with `mix test`, the current coverage is 96.9 you can run the coverage tool with `MIX_ENV=test mix coveralls.html`
+You can run the tests with `mix test`, the current coverage is 97.1 you can run the coverage tool with `MIX_ENV=test mix coveralls.html`

@@ -1,6 +1,5 @@
 defmodule LiterateOctoCouscous.HealthCheckerTest do
   use ExUnit.Case
-  use LiterateOctoCouscous.DataCase
 
   import Mox
   import ExUnit.CaptureLog
@@ -10,7 +9,7 @@ defmodule LiterateOctoCouscous.HealthCheckerTest do
 
   setup :verify_on_exit!
 
-  describe "" do
+  describe "HealthChecker.handle_info/2 scenarios" do
     test "handle_info/2 with :check_health message" do
       MockHTTPoison
       |> expect(:get, fn _ ->

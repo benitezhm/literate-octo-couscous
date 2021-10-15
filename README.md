@@ -27,3 +27,7 @@ From root route `/` you'll see several links, or you can use the following links
 ## Learn more
 
 https://hexdocs.pm/phoenix/mix_phx_gen_auth.html
+
+## Tests
+
+You can run the tests with `mix test`, the current coverage is 96.9 you can run the coverage tool with `MIX_ENV=test mix coveralls.html`

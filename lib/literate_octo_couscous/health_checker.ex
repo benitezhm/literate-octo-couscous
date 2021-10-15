@@ -16,7 +16,7 @@ defmodule LiterateOctoCouscous.HealthChecker do
 
   @impl true
   def handle_info(:check_health, state) do
-    do_check_health(state)
+    do_check_health()
     {:noreply, state}
   end
 
@@ -26,8 +26,8 @@ defmodule LiterateOctoCouscous.HealthChecker do
     {:noreply, state}
   end
 
-  defp do_check_health(_state) do
-    :timer.tc(fn -> HTTPoison.get(@endpoint) end)
+  defp do_check_health() do
+    :timer.tc(fn -> Application.get_env(:literate_octo_couscous, :httpoison).get(@endpoint) end)
     |> process_response()
   end
 

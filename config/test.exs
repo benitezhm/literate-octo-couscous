@@ -27,7 +27,10 @@ config :literate_octo_couscous, LiterateOctoCouscousWeb.Endpoint,
 config :literate_octo_couscous, LiterateOctoCouscous.Mailer, adapter: Swoosh.Adapters.Test
 
 # Print only warnings and errors during test
-config :logger, level: :warn
+config :logger, level: :info
+
+# httpoison module
+config :literate_octo_couscous, :httpoison, MockHTTPoison
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime

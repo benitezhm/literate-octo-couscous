@@ -15,9 +15,11 @@ defmodule LiterateOctoCouscous.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: LiterateOctoCouscous.PubSub},
       # Start the Endpoint (http/https)
-      LiterateOctoCouscousWeb.Endpoint
+      LiterateOctoCouscousWeb.Endpoint,
       # Start a worker by calling: LiterateOctoCouscous.Worker.start_link(arg)
       # {LiterateOctoCouscous.Worker, arg}
+      # Start the heatl checker worker
+      LiterateOctoCouscous.HealthChecker
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

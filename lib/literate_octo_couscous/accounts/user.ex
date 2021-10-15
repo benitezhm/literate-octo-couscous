@@ -38,7 +38,7 @@ defmodule LiterateOctoCouscous.Accounts.User do
       validations on a LiveView form), this option can be set to `false`.
       Defaults to `true`.
   """
-  def eregistration_changeset(user, attrs, opts \\ []) do
+  def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password])
     |> validate_email()
